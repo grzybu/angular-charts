@@ -18,12 +18,12 @@ export class ExchangeRatesService {
 
   constructor(private httpClient: HttpClient, private datePipe: DatePipe) { }
 
-  getExchangeRates(base: string, to: string, from: string, endAt: string): Observable<any> {
+  getExchangeRates(base: string, to: string, startAt: string, endAt: string): Observable<any> {
      const params = new HttpParams()
           .set('symbols', to)
           .set('base', base)
-          .set('start_at', from)
-          .set('end_at', this.datePipe.transform(Date.now(), 'yyyy-MM-dd'));
+          .set('start_at', startAt)
+          .set('end_at', endAt);
 
     return this.httpClient.get(this.baseUrl + '/history', { params }).pipe(
       map(response => {

@@ -1,17 +1,17 @@
 <mat-form-field *ngIf="currencies | async as availableCurrencies">
-  <mat-select  (selectionChange)="changeCurrency($event)"  [(value)]="selectedCurrency" ngModel="selectedCurrency" placeholder="Currency">
+  <mat-select  (selectionChange)="changeCurrency($event)"  [(value)]="currency"  placeholder="Currency">
       <mat-option *ngFor="let cur of availableCurrencies" [value]="cur.code">
           {{cur.displayName}}
         </mat-option>
   </mat-select>
 </mat-form-field>
 <mat-form-field>
-    <input matInput [matDatepicker]="dateFrom" placeholder="Choose a dateFrom">
-    <mat-datepicker-toggle matSuffix [for]="dateFrom"></mat-datepicker-toggle>
-    <mat-datepicker #dateFrom></mat-datepicker>
+    <input matInput [min]="minDate" [max]="maxDate" (dateChange)="changeDateFrom($event)" [(value)]="dateFrom" [matDatepicker]="dateFromInput" placeholder="Choose a dateFrom">
+    <mat-datepicker-toggle matSuffix [for]="dateFromInput"></mat-datepicker-toggle>
+    <mat-datepicker #dateFromInput disabled="false"></mat-datepicker>
   </mat-form-field>
   <mat-form-field>
-      <input matInput [matDatepicker]="dateTo" placeholder="Choose a dateTo">
-      <mat-datepicker-toggle matSuffix [for]="dateTo"></mat-datepicker-toggle>
-      <mat-datepicker #dateTo></mat-datepicker>
+      <input matInput [min]="minDate" [max]="maxDate" (dateChange)="changeDateTo($event)" [matDatepicker]="dateToInput" [(value)]="dateTo" placeholder="Choose a dateTo">
+      <mat-datepicker-toggle matSuffix [for]="dateToInput"></mat-datepicker-toggle>
+      <mat-datepicker #dateToInput disabled="false"></mat-datepicker>
     </mat-form-field>
