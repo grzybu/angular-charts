@@ -1,0 +1,23 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+  <h1>
+    Welcome to {{ title }}!
+  </h1>
+
+  <app-picker (currencyChanged)="onCurrencyChanged($event)"></app-picker>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div *ngIf="dataLoaded | async" style="display: block;" style="margin: 0 auto;width: 60%; height: 150px;" >
+      <canvas baseChart
+                  [datasets]="lineChartData"
+                  [labels]="lineChartLabels"
+                  [options]="lineChartOptions"
+                  [colors]="lineChartColors"
+                  [chartType]="lineChartType"
+                 ></canvas>
+      </div>
+    </div>
+
+  </div>
+</div>
