@@ -12,15 +12,20 @@
 
   <div class="row">
     <div>
-      <div *ngIf="dataLoaded | async" style="display: block;" style="margin: 0 auto;width: 60%; height: 150px;" >
-      <canvas baseChart
+      <div style="display: block;" style="margin: 0 auto;width: 60%; height: 150px;" >
+      <canvas *ngIf="dataLoaded | async; else spinner"  baseChart
                   [datasets]="lineChartData"
                   [labels]="lineChartLabels"
                   [options]="lineChartOptions"
                   [colors]="lineChartColors"
                   [chartType]="lineChartType"
                  ></canvas>
+
+                 <ng-template #spinner>
+                  <mat-spinner></mat-spinner>
+                </ng-template>
       </div>
+     
     </div>
   </div>
 </div>
