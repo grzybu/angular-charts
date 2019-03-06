@@ -48,7 +48,6 @@ export class MainComponent implements AfterViewInit {
   public lineChartType = 'line';
   public lineChartLegend = true;
 
-
   displayChart() {
     this.exchangeRates.getExchangeRates(this.currencyCode, 'PLN', this.dateFrom, this.dateTo).subscribe(
       data => {

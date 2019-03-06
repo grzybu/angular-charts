@@ -1,14 +1,35 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ExchangeRatesService, Currency } from 'src/app/services/exchange-rates.service';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as moment from 'moment';
-import { FormControl } from '@angular/forms';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'YYYY-MM-DD',
+  },
+  display: {
+    dateInput: 'YYYY-MM-DD',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
+  },
+};
 
 @Component({
   selector: 'app-picker',
   templateUrl: './picker.component.html',
-  styleUrls: ['./picker.component.scss']
+  styleUrls: ['./picker.component.scss'],
+  providers: [
+    // `MomentDateAdapter` and `MAT_MOMENT_DATE_FORMATS` can be automatically provided by importing
+    // `MatMomentDateModule` in your applications root module. We provide it at the component level
+    // here, due to limitations of our example generation script.
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
+  ],
 })
+
 export class PickerComponent implements OnInit {
 
   currencies: Observable<Array<Currency>>;
@@ -21,12 +42,15 @@ export class PickerComponent implements OnInit {
   @Input() dateFrom;
   @Output() dateFromChanged: EventEmitter<string> = new EventEmitter();
 
-  maxDate = new Date();
-  minDate = new Date(1999, 1, 1);
+  maxDateFrom = moment();
+  maxDateTo = this.maxDateFrom;
+  minDateFrom = moment([1999, 1, 1]);
+  minDateTo;
 
   constructor(private exchangeRatesService: ExchangeRatesService) {
-     this.dateFrom = moment().subtract(31, 'days').toDate();
-     this.dateTo = new Date();
+     this.dateFrom = moment().subtract(31, 'days');
+     this.minDateTo = this.dateFrom.add(1, 'day');
+     this.dateTo =  moment();
      this.currency = 'EUR';
    }
 
@@ -39,26 +63,44 @@ export class PickerComponent implements OnInit {
     this.currencyChanged.emit(event.value);
   }
 
-  changeDateTo(event) {
-    this.dateTo = event.value;
-    this.dateToChanged.emit(event.value);
-  }
+  changeDateFrom(event): void {
+    if (this.dateFrom === event.value) {
+      return;
+    }
+    this.minDateTo = event.value;
 
-  changeDateFrom(event) {
     this.dateFrom = event.value;
     this.dateFromChanged.emit(event.value);
   }
 
+  changeDateTo(event) {
+
+    if (this.dateTo === event.value) {
+      return;
+    }
+
+    if (this.minDateFrom >= event.value) {
+      this.minDateFrom = event.value;
+    }
+
+    if (this.maxDateFrom >= event.value) {
+      this.maxDateFrom = event.value;
+    }
+
+    this.dateTo = event.value;
+    this.dateToChanged.emit(event.value);
+  }
+
   public getDateFrom(format?: string) {
     if (format) {
-      return moment(this.dateFrom).format(format);
+      return this.dateFrom.format(format);
     }
     return this.dateFrom;
   }
 
   public getDateTo(format?: string) {
     if (format) {
-      return moment(this.dateTo).format(format);
+      return this.dateTo.format(format);
     }
     return this.dateTo;
   }

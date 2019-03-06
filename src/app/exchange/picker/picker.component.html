@@ -6,12 +6,12 @@
   </mat-select>
 </mat-form-field>
 <mat-form-field>
-    <input matInput [min]="minDate" [max]="maxDate" (dateChange)="changeDateFrom($event)" [(value)]="dateFrom" [matDatepicker]="dateFromInput" placeholder="Choose a dateFrom">
+    <input matInput [(min)]="minDateFrom" [(max)]="maxDateFrom" (dateChange)="changeDateFrom($event)" [(value)]="dateFrom" [matDatepicker]="dateFromInput" placeholder="Choose a dateFrom">
     <mat-datepicker-toggle matSuffix [for]="dateFromInput"></mat-datepicker-toggle>
     <mat-datepicker #dateFromInput disabled="false"></mat-datepicker>
   </mat-form-field>
   <mat-form-field>
-      <input matInput [min]="minDate" [max]="maxDate" (dateChange)="changeDateTo($event)" [matDatepicker]="dateToInput" [(value)]="dateTo" placeholder="Choose a dateTo">
+      <input matInput [(min)]="minDateTo" [(max)]="maxDateTo" (dateChange)="changeDateTo($event)" [matDatepicker]="dateToInput" [(value)]="dateTo" placeholder="Choose a dateTo">
       <mat-datepicker-toggle matSuffix [for]="dateToInput"></mat-datepicker-toggle>
       <mat-datepicker #dateToInput disabled="false"></mat-datepicker>
     </mat-form-field>
