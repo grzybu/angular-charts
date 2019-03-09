@@ -4,6 +4,8 @@ import { Observable, from } from 'rxjs';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as moment from 'moment';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
 
 export const MY_FORMATS = {
   parse: {
@@ -32,7 +34,9 @@ export const MY_FORMATS = {
 
 export class PickerComponent implements OnInit {
 
-  currencies: Observable<Array<Currency>>;
+  readonly DEFAULT_CURRENCY = 'EUR';
+
+  currencies: Array<Currency>;
   @Input() currency;
   @Output() currencyChanged: EventEmitter<string> = new EventEmitter();
 
@@ -47,20 +51,32 @@ export class PickerComponent implements OnInit {
   minDateFrom = moment([1999, 1, 1]);
   minDateTo;
 
-  constructor(private exchangeRatesService: ExchangeRatesService) {
-     this.dateFrom = moment().subtract(31, 'days');
-     this.minDateTo = this.dateFrom.add(1, 'day');
-     this.dateTo =  moment();
-     this.currency = 'EUR';
-   }
+
+  constructor(
+    private route: ActivatedRoute,
+    private exchangeRatesService: ExchangeRatesService,
+    private router: Router
+    ) {}
 
   ngOnInit() {
-    this.currencies = this.exchangeRatesService.getAvailableCurrencies();
+    this.route.data.subscribe(
+        (resolvedData) => {
+          this.currencies = resolvedData.currencies;
+        }
+    );
+
+    this.route.queryParams.subscribe(queryParams => {
+      this.currency = queryParams.currency ? queryParams.currency : this.DEFAULT_CURRENCY;
+      this.dateFrom = queryParams['date-from'] ? moment(queryParams['date-from']) : moment().subtract(31, 'days');
+      this.minDateTo = moment(this.getDateFrom('YYYY-MM-DD')).add(1, 'day');
+      this.dateTo = queryParams['date-to'] ? moment(queryParams['date-to']) : moment();
+      });
   }
 
   changeCurrency(event) {
     this.currency = event.value;
     this.currencyChanged.emit(event.value);
+    this.navigate();
   }
 
   changeDateFrom(event): void {
@@ -68,13 +84,18 @@ export class PickerComponent implements OnInit {
       return;
     }
     this.minDateTo = event.value;
-
     this.dateFrom = event.value;
     this.dateFromChanged.emit(event.value);
+    this.navigate();
+  }
+
+  navigate(): void {
+    this.router.navigate([''],
+    { queryParams: {currency: this.currency, 'date-from': this.getDateFrom('YYYY-MM-DD'), 'date-to' : this.getDateTo('YYYY-MM-DD')}}
+    );
   }
 
   changeDateTo(event) {
-
     if (this.dateTo === event.value) {
       return;
     }
@@ -89,6 +110,7 @@ export class PickerComponent implements OnInit {
 
     this.dateTo = event.value;
     this.dateToChanged.emit(event.value);
+    this.navigate();
   }
 
   public getDateFrom(format?: string) {

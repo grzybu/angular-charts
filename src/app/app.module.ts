@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyMaterialModule } from './my-material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule, DatePipe } from '@angular/common';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { CommonModule, DatePipe } from '@angular/common';
     ChartsModule,
     BrowserAnimationsModule,
     MyMaterialModule,
-    CommonModule
+    CommonModule,
+    AppRoutingModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

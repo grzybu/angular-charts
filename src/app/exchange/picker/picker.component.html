@@ -1,4 +1,4 @@
-<mat-form-field *ngIf="currencies | async as availableCurrencies">
+<mat-form-field *ngIf="currencies as availableCurrencies">
   <mat-select  (selectionChange)="changeCurrency($event)"  [(value)]="currency"  placeholder="Currency">
       <mat-option *ngFor="let cur of availableCurrencies" [value]="cur.code">
           {{cur.displayName}}

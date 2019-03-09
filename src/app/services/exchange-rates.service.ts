@@ -32,7 +32,7 @@ export class ExchangeRatesService {
     );
   }
 
-  getAvailableCurrencies(): Observable<any> {
+  getAvailableCurrencies() {
     return this.httpClient.get(this.baseUrl + '/latest').pipe(
       map(response => {
         const currencies = Array<Currency>();
