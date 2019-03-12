@@ -10,12 +10,14 @@ import { MyMaterialModule } from './my-material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule, DatePipe } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainComponent,
-    PickerComponent
+    PickerComponent,
+    HomeComponent
   ],
   imports: [
     HttpClientModule,
