@@ -3,6 +3,7 @@ import { PickerComponent } from '../picker/picker.component';
 import { ExchangeRatesService } from 'src/app/services/exchange-rates.service';
 import { Observable, of } from 'rxjs';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { ChartComponent } from '../chart/chart.component';
 
 
 export interface HistoryDataItem {
@@ -18,72 +19,48 @@ export interface HistoryDataItem {
 })
 export class MainComponent implements AfterViewInit, OnInit {
 
-  readonly BASE_CURRENCY = 'PLN';
-
-  public lineChartLabels;
-  public lineChartData;
+  public readonly baseCurrency = 'PLN';
 
   public dataLoaded: Observable<boolean>;
   @ViewChild(PickerComponent) private picker: PickerComponent;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-
+  @ViewChild(ChartComponent) private chart: ChartComponent;
 
   public constructor(private exchangeRates: ExchangeRatesService) {
     this.dataLoaded = of(false);
   }
 
-  private currencyCode: string;
+  public currencyCode: string;
   private dateFrom;
   private dateTo;
   title = 'angular-charts';
 
-  public lineChartOptions: any = {
-    responsive: true,
-    elements: {
-      line: {
-          tension: 0, // disables bezier curves
-      }
-  }
-  };
-  public lineChartColors: Array<any> = [
-    {
-      borderColor: '#05668D',
-      backgroundColor: '#EBF2FA',
-      pointBorderColor: '#A5BE00',
-      pointBackgroundColor: '#A5BE00',
-      pointHoverBackgroundColor: 'rgba(7,91,130)',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-    }
-  ];
-  public lineChartType = 'line';
-  public lineChartLegend = true;
+  exchangeData;
+
+ 
   public tableDataSource: MatTableDataSource<HistoryDataItem>;
   public readonly tableColumns = ['position', 'date', 'value'];
 
   prepareData() {
-    this.exchangeRates.getExchangeRates(this.currencyCode, this.BASE_CURRENCY, this.dateFrom, this.dateTo).subscribe(
+    this.exchangeRates.getExchangeRates(this.currencyCode, this.baseCurrency, this.dateFrom, this.dateTo).subscribe(
       data => {
+        this.exchangeData = data;
         const values = [];
         const labels = [];
-        this.lineChartLabels = [];
         const days = Object.keys(data.rates).sort();
         let index = 0;
         const tableRows = [];
         for (const day of days) {
           labels.push(day);
-          values.push(data.rates[day][this.BASE_CURRENCY]);
+          values.push(data.rates[day][this.baseCurrency]);
           tableRows.push(
             {
-              position: ++index, date: day, value: data.rates[day][this.BASE_CURRENCY]
+              position: ++index, date: day, value: data.rates[day][this.baseCurrency]
             }
           );
         }
         this.tableDataSource = new MatTableDataSource<HistoryDataItem>(tableRows);
         this.tableDataSource.paginator = this.paginator;
-        this.lineChartLabels = labels;
-        this.lineChartData = [
-          { data: values, label: this.currencyCode },
-        ];
         this.dataLoaded = of(true);
       }
     );
@@ -123,6 +100,5 @@ export class MainComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
-    console.log(this.paginator);
   }
 }

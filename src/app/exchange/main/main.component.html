@@ -13,10 +13,7 @@
         <ng-template mat-tab-label>
             <mat-icon>show_chart</mat-icon> Chart
           </ng-template>
-      <div style="display: block;" style="margin: 0 auto;width: 60%; height: 500px;">
-        <canvas *ngIf="dataLoaded | async" baseChart [datasets]="lineChartData" [labels]="lineChartLabels"
-          [options]="lineChartOptions" [colors]="lineChartColors" [chartType]="lineChartType"></canvas>
-      </div>
+          <app-chart [exchangeData]="exchangeData" [baseCurrency]="baseCurrency"></app-chart>
     </mat-tab>
     <!-- C2 -->
     <mat-tab>

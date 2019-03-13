@@ -11,13 +11,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { CommonModule, DatePipe } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
+import { ChartComponent } from './exchange/chart/chart.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainComponent,
     PickerComponent,
-    HomeComponent
+    HomeComponent,
+    ChartComponent
   ],
   imports: [
     HttpClientModule,

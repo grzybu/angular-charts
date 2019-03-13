@@ -54,7 +54,6 @@ export class PickerComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private exchangeRatesService: ExchangeRatesService,
     private router: Router
     ) {}
 
@@ -90,7 +89,7 @@ export class PickerComponent implements OnInit {
   }
 
   navigate(): void {
-    this.router.navigate([''],
+    this.router.navigate(['exchange'],
     { queryParams: {currency: this.currency, 'date-from': this.getDateFrom('YYYY-MM-DD'), 'date-to' : this.getDateTo('YYYY-MM-DD')}}
     );
   }
