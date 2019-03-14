@@ -1,4 +1,4 @@
-<div style="display: block;" style="margin: 0 auto;width: 60%; height: 500px;">
-  <canvas *ngIf="chartDataPrepared | async" baseChart [datasets]="lineChartData" [labels]="lineChartLabels"
+<div  *ngIf="chartDataPrepared | async" style="display: block;" style="margin: 0 auto;width: 60%; height: 500px;">
+  <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels"
     [options]="lineChartOptions" [colors]="lineChartColors" [chartType]="lineChartType"></canvas>
 </div>

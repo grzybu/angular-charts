@@ -16,7 +16,7 @@ export class ExchangeRatesService {
 
   readonly baseUrl = 'https://api.exchangeratesapi.io';
 
-  constructor(private httpClient: HttpClient, private datePipe: DatePipe) { }
+  constructor(private httpClient: HttpClient) { }
 
   getExchangeRates(base: string, to: string, startAt: string, endAt: string): Observable<any> {
      const params = new HttpParams()
