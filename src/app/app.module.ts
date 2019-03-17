@@ -12,6 +12,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './home/home.component';
 import { ChartComponent } from './exchange/chart/chart.component';
+import { TableComponent } from './exchange/table/table.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,9 @@ import { ChartComponent } from './exchange/chart/chart.component';
     MainComponent,
     PickerComponent,
     HomeComponent,
-    ChartComponent
+    ChartComponent,
+    MainComponent,
+    TableComponent
   ],
   imports: [
     HttpClientModule,

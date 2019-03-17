@@ -2,8 +2,8 @@ import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { PickerComponent } from '../picker/picker.component';
 import { ExchangeRatesService } from 'src/app/services/exchange-rates.service';
 import { Observable, of } from 'rxjs';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { ChartComponent } from '../chart/chart.component';
+import { TableComponent } from '../table/table.component';
 
 
 export interface HistoryDataItem {
@@ -23,8 +23,9 @@ export class MainComponent implements AfterViewInit, OnInit {
 
   public dataLoaded: Observable<boolean>;
   @ViewChild(PickerComponent) private picker: PickerComponent;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(ChartComponent) private chart: ChartComponent;
+  @ViewChild(TableComponent) private table: TableComponent;
+
 
   public constructor(private exchangeRates: ExchangeRatesService) {
     this.dataLoaded = of(false);
@@ -37,30 +38,10 @@ export class MainComponent implements AfterViewInit, OnInit {
 
   exchangeData;
 
- 
-  public tableDataSource: MatTableDataSource<HistoryDataItem>;
-  public readonly tableColumns = ['position', 'date', 'value'];
-
   prepareData() {
     this.exchangeRates.getExchangeRates(this.currencyCode, this.baseCurrency, this.dateFrom, this.dateTo).subscribe(
       data => {
         this.exchangeData = data;
-        const values = [];
-        const labels = [];
-        const days = Object.keys(data.rates).sort();
-        let index = 0;
-        const tableRows = [];
-        for (const day of days) {
-          labels.push(day);
-          values.push(data.rates[day][this.baseCurrency]);
-          tableRows.push(
-            {
-              position: ++index, date: day, value: data.rates[day][this.baseCurrency]
-            }
-          );
-        }
-        this.tableDataSource = new MatTableDataSource<HistoryDataItem>(tableRows);
-        this.tableDataSource.paginator = this.paginator;
         this.dataLoaded = of(true);
       }
     );
